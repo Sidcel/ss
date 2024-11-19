@@ -1,0 +1,16 @@
+package ar.edu.unlam.pb1.dominio.enums;
+
+public enum TipoDeContrasenia {
+	CORREO, JUEGO;
+	
+	public static String obtenerOpciones() {
+		String opciones = "";
+		TipoDeContrasenia[] valores = TipoDeContrasenia.values();
+		for (int i = 0; i < valores.length; i++) {
+			if (i > 0)
+				opciones += ", ";
+			opciones += valores[i].name();
+		}
+		return opciones;
+	}
+}
