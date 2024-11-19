@@ -1,0 +1,34 @@
+package ar.edu.unlam.pb1.interfaz.enums;
+
+public enum MenuPrincipal {
+	AGREGAR_CONTRASENIA("Agregar contrasenia."), 
+	MODIFICAR_CONTRASENIA_POR_NOMBRE("Modificar contrasenia por nombre."),
+	MOSTRAR_TODAS_LAS_CONTRASENIAS_ORDENADAS_POR_TIPO_DE_CONTRASENIA_ASCENDENTE(
+			"Mostrar todas las contrasenias ordenadas por tipo de contrasenia ascendente."),
+	MOSTRAR_CONTRASENIAS_CUYO_NOMBRE_EMPIECE_CON("Mostrar contrasenias cuyo nombre empiece con."),
+	MOSTRAR_LA_CANTIDAD_DE_CONTRASENIAS_DEBILES_POR_TIPO_DE_CONTRASENIA("Mostrar la cantidad de contrasenias debiles por tipo de contrasenia."),
+	MOSTRAR_PROMEDIO_DE_LARGO_DE_CARACTERES_DE_CONTRASENIAS_FUERTES(
+			"Mostrar promedio de largo de caracteres de contrasenias fuertes"),
+	SALIR("Salir.");
+
+	private String descripcion;
+
+	private MenuPrincipal(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	private String obtenerDescripcion() {
+		return this.descripcion;
+	}
+
+	public static String obtenerMenuPrincipal() {
+		String menuPrincipal = "\n";
+		MenuPrincipal[] opciones = MenuPrincipal.values();
+		for (int i = 0; i < opciones.length; i++) {
+			if (i > 0)
+				menuPrincipal += "\n";
+			menuPrincipal += (opciones[i].ordinal() + 1) + ". " + opciones[i].obtenerDescripcion();
+		}
+		return menuPrincipal;
+	}
+}
