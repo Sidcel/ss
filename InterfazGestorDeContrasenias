@@ -1,0 +1,192 @@
+package ar.edu.unlam.pb1.interfaz;
+
+import java.util.Scanner;
+
+import ar.edu.unlam.pb1.dominio.Contrasenia;
+import ar.edu.unlam.pb1.dominio.GestorDeContrasenias;
+import ar.edu.unlam.pb1.dominio.enums.TipoDeContrasenia;
+import ar.edu.unlam.pb1.interfaz.enums.MenuPrincipal;
+
+public class InterfazGestorDeContrasenias {
+
+	private static Scanner teclado = new Scanner(System.in);
+
+	public static void main(String[] args) {
+		MenuPrincipal opcionMenuPrincipal = null;
+		iniciarSesion();
+		GestorDeContrasenias gestorDeContrasenias = new GestorDeContrasenias();
+		do {
+			opcionMenuPrincipal = ingresarOpcionMenuPrincipal();
+			switch (opcionMenuPrincipal) {
+			case AGREGAR_CONTRASENIA:
+				agregarContrasenia(gestorDeContrasenias);
+				break;
+			case MODIFICAR_CONTRASENIA_POR_NOMBRE:
+				modificarContrasenia(gestorDeContrasenias);
+				break;
+			case MOSTRAR_TODAS_LAS_CONTRASENIAS_ORDENADAS_POR_TIPO_DE_CONTRASENIA_ASCENDENTE:
+				mostrarTodasLasContraseniasOrdenadasPorTipoDeContraseniaAscendente(gestorDeContrasenias);
+				break;
+			case MOSTRAR_CONTRASENIAS_CUYO_NOMBRE_EMPIECE_CON:
+				mostrarContraseniasCuyoNombreEmpieceCon(gestorDeContrasenias);
+				break;
+			case MOSTRAR_LA_CANTIDAD_DE_CONTRASENIAS_DEBILES_POR_TIPO_DE_CONTRASENIA:
+				mostrarLaCantidadDeContraseniasDebilesPorTipoDeContrasenia(gestorDeContrasenias);
+				break;
+			case MOSTRAR_PROMEDIO_DE_LARGO_DE_CARACTERES_DE_CONTRASENIAS_FUERTES:
+				gestorDeContrasenias.obtenercontras();
+				mostrarPromedioDeLargoDeCaracteresDeContraseniasFuertes(gestorDeContrasenias);
+
+				break;
+			case SALIR:
+				mostrarPorPantalla("\nHasta luego!");
+				break;
+			}
+		} while (!opcionMenuPrincipal.equals(MenuPrincipal.SALIR));
+	}
+
+	private static void iniciarSesion() {
+		// TODO: Debe solicitar el ingreso del usuario y la contrasenia del sistema para
+		// validarlos en el gestor de contrasenias. Si los datos ingresados NO son
+		// validos, se debera continuar solicitando el ingreso de los mismos.
+		GestorDeContrasenias gestorDeContrasenias;
+		String usuario = null;
+		int contraseniaDelSistema = 0;
+		do {
+			usuario = ingresarString("Ingrese el usuario para ingresar al sistema ");
+			contraseniaDelSistema = ingresarNumeroEntero("Ingrese la contrasenia para ingresar al sistema ");
+		} while (!usuario.equals(GestorDeContrasenias.getUsuario())
+				|| contraseniaDelSistema != GestorDeContrasenias.getContrasenia());
+		if (GestorDeContrasenias.validarUsuarioYContrasenia(usuario, contraseniaDelSistema))
+			mostrarPorPantalla("Ingresaste al sistema.");
+		else
+			mostrarPorPantallaError("No se pudo ingresar al sistema.");
+
+	}
+
+	private static void mostrarPorPantallaError(String mensaje) {
+		System.err.println(mensaje);
+
+	}
+
+	private static void agregarContrasenia(GestorDeContrasenias gestorDeContrasenias) {
+		// TODO: Debe solicitar el ingreso del usuario, contrasenia y tipo de
+		// contrasenia para luego agregarla al gestor de contrasenias. Debe mostrar un
+		// mensaje de exito o error segun corresponda.
+		String usuario = ingresarString("Ingrese el usuario");
+		String contrasenia = ingresarString("Ingrese la nueva contrasenia");
+		TipoDeContrasenia tipoDeContrasenia = ingresarTipoDeContrasenia();
+		if (gestorDeContrasenias.agregarContrasenia(usuario, contrasenia, tipoDeContrasenia))
+			mostrarPorPantalla("Se agrego correctamente la contrasenia.");
+		else
+			mostrarPorPantallaError("ERRORR!\nNo se pudo agregar la contrasenia");
+	}
+
+	private static void modificarContrasenia(GestorDeContrasenias gestorDeContrasenias) {
+		// TODO: Debe solicitarse el ingreso del nombre de la contrasenia que se quiere
+		// modificar. Si no existe una contrasenia en el gestor de contrasenias con
+		// dicho nombre, se debera continuar solicitando el ingreso del nombre,
+		// mostrando el mensaje "No existe una contrasenia con ese nombre". Una vez
+		// validado el nombre, se debe ingresar la nueva contrasenia, para actualizarla
+		// en el gestor de contrasenias. Debe mostrar un mensaje de exito o error segun
+		// corresponda.
+		String nombreDeLaContrasenia = ingresarString("Ingrese el nombre de la contrasenia que se quiere modificar");
+		while (gestorDeContrasenias.existeContraseniaConNombre(nombreDeLaContrasenia) == false) {
+			nombreDeLaContrasenia = ingresarString(
+					"Errorrr!! No existe una contrasenia con ese nombre\nIngrese un nombre valido para poder modificar la contrasenia que quiere");
+		}
+		String nuevaContrasenia = ingresarString("Ingrese la nueva contrasenia");
+		if (gestorDeContrasenias.modificarContrasenia(nombreDeLaContrasenia, nuevaContrasenia))
+			mostrarPorPantalla("Se cambio la contrasenia.");
+		else
+			mostrarPorPantallaError("ERRORRR!!!\nNo se pudo cambiar la contrasenia :(");
+	}
+
+	private static void mostrarTodasLasContraseniasOrdenadasPorTipoDeContraseniaAscendente(
+			GestorDeContrasenias gestorDeContrasenias) {
+		// TODO: Debe mostrar por pantalla las contrasenias ordenadas por tipo de
+		// contrasenia ascendente, existentes en el gestor de contrasenias.
+		 String contraseniasOrdenadas = gestorDeContrasenias.obtenerContraseniasOrdenadasPorTipoDeContraseniaAscendente();
+		    mostrarPorPantalla(contraseniasOrdenadas);
+		
+	}
+
+	private static void mostrarContraseniasCuyoNombreEmpieceCon(GestorDeContrasenias gestorDeContrasenias) {
+		// TODO: Debe solicitar el ingreso de un texto y mostrar por pantalla las
+		// contrasenias, existentes en el gestor de contrasenias, cuyo nombre empiece
+		// con el texto ingresado.
+		String textoIngresado = ingresarString("Ingrese el texto ");
+		Contrasenia contraseniasEncontradas[] = gestorDeContrasenias
+				.obtenerContraseniasCuyoNombreEmpieceCon(textoIngresado);
+		if (contraseniasEncontradas != null && contraseniasEncontradas.length > 0)
+			mostrarArrayDeContrasenias(contraseniasEncontradas);
+		else
+			mostrarPorPantallaError("Errorrr!!!\nNo se encontro ninguna contrasenia que comience con ese nombre");
+	}
+
+	private static void mostrarLaCantidadDeContraseniasDebilesPorTipoDeContrasenia(
+			GestorDeContrasenias gestorDeContrasenias) {
+		// TODO: Debe mostrar la cantidad de contrasenias debiles, existentes en el
+		// gestor de contrasenias, por cada tipo de contrasenia.
+		// Ejemplo:
+		// Cantidad de contrasenias debiles para el tipo CORREO: 1
+		// Cantidad de contrasenias debiles para el tipo JUEGO: 2
+		mostrarPorPantalla("Cantidad de contrasenias debiles de tipo de contrasenia correo " + gestorDeContrasenias.obtenerLaCantidadDeContraseniasDebilesPorTipoDeContrasenia(TipoDeContrasenia.CORREO));
+		mostrarPorPantalla("Cantidad de contrasenias debiles de tipo de contrasenia juego" + gestorDeContrasenias.obtenerLaCantidadDeContraseniasDebilesPorTipoDeContrasenia(TipoDeContrasenia.JUEGO));
+
+	}
+
+	private static void mostrarPromedioDeLargoDeCaracteresDeContraseniasFuertes(
+			GestorDeContrasenias gestorDeContrasenias) {
+		// TODO: Debe mostar por pantalla el promedio de largo de caracteres de
+		// contrasenias fuertes, existentes en el gestor de contrasenias
+		mostrarPorPantalla(
+				"El promedio es de " + gestorDeContrasenias.obtenerPromedioDeLargoDeCaracteresDeContraseniasFuertes());
+	}
+
+	private static void mostrarContrasenias(Contrasenia[] contrasenias) {
+		for (int i = 0; i < contrasenias.length; i++) {
+			if (contrasenias[i] != null) {
+				mostrarPorPantalla("\n" + contrasenias[i].toString());
+			}
+		}
+	}
+
+	private static MenuPrincipal ingresarOpcionMenuPrincipal() {
+		mostrarPorPantalla(MenuPrincipal.obtenerMenuPrincipal());
+		int opcion = 0;
+		do {
+			opcion = ingresarNumeroEntero("\nIngrese la opcion:");
+		} while (opcion < 0 || opcion > MenuPrincipal.values().length);
+
+		return MenuPrincipal.values()[opcion - 1];
+	}
+
+	private static TipoDeContrasenia ingresarTipoDeContrasenia() {
+		return TipoDeContrasenia.valueOf(
+				ingresarString("\nIngrese el tipo de contrasenia (" + TipoDeContrasenia.obtenerOpciones() + "):")
+						.toUpperCase());
+	}
+
+	private static int ingresarNumeroEntero(String mensaje) {
+		mostrarPorPantalla(mensaje);
+		return teclado.nextInt();
+	}
+
+	private static String ingresarString(String mensaje) {
+		mostrarPorPantalla(mensaje);
+		return teclado.next();
+	}
+
+	private static void mostrarPorPantalla(String mensaje) {
+		System.out.println(mensaje);
+	}
+
+	private static void mostrarArrayDeContrasenias(Contrasenia contrasenia[]) {
+		for (int i = 0; i < contrasenia.length; i++) {
+			if (contrasenia[i] != null) {
+				mostrarPorPantalla(contrasenia[i].toString());
+			}
+		}
+	}
+}
