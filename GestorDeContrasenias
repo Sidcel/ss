@@ -1,0 +1,211 @@
+package ar.edu.unlam.pb1.dominio;
+
+import java.util.Arrays;
+
+import ar.edu.unlam.pb1.dominio.enums.TipoDeContrasenia;
+
+public class GestorDeContrasenias {
+	private static final int CANTIDAD_DE_MAYUSCULAS_PARA_CONTRASENIA_FUERTE = 2;
+	private static final int CANTIDAD_DE_NUMEROS_PARA_CONTRASENIA_FUERTE = 3;
+	private static final int CANTIDAD_DE_MINUSCULAS_PARA_CONTRASENIA_FUERTE = 4;
+	private static final int CANTIDAD_MAXIMA_DE_CONTRASENIAS = 10;
+	private static final String USUARIO = "pb1";
+	private static final int CONTRASENIA = 1234;
+	private Contrasenia[] contrasenias;
+
+	// TODO: Completar el constructor, atributos, constantes, getters y setters
+	// necesarios
+	public GestorDeContrasenias() {
+		this.contrasenias = new Contrasenia[CANTIDAD_MAXIMA_DE_CONTRASENIAS];
+	}
+
+	public static String getUsuario() {
+		return USUARIO;
+	}
+
+	public static int getContrasenia() {
+		return CONTRASENIA;
+	}
+
+	public static boolean validarUsuarioYContrasenia(String usuario, int contrasenia) {
+		// TODO: Debe verificar que el usuario y la contrasenia son correctos para
+		// devolver verdadero.
+		boolean validado = false;
+		if (usuario.equals(USUARIO) && contrasenia == CONTRASENIA) {
+			validado = true;
+		}
+		return validado;
+	}
+
+	public boolean existeContraseniaConNombre(String nombre) {
+		// TODO: Debe buscar entre las contrasenias si existe alguna que posea el nombre
+		// pasado como parametro para devolver verdadero.
+		boolean existeContrasenia = false;
+		for (int i = 0; i < this.contrasenias.length; i++) {
+			if (this.contrasenias[i] != null && this.contrasenias[i].getNombre().equals(nombre)) {
+				existeContrasenia = true;
+			}
+		}
+		return existeContrasenia;
+	}
+
+	public boolean agregarContrasenia(String nombre, String contrasenia, TipoDeContrasenia tipoDeContrasenia) {
+		// TODO: Debera crear una nueva contrasenia para luego agregarla al array de
+		// contrasenias. Antes de agregarla, se debera determinar si la nueva
+		// contrasenia es fuerte o no. Devuelve verdadero en caso de poder agregarla.
+		boolean seAgrego = false;
+		int i = 0;
+		while (!seAgrego && i < this.contrasenias.length) {
+			if (this.contrasenias[i] == null) {
+				this.contrasenias[i] = new Contrasenia(nombre, contrasenia, tipoDeContrasenia);
+				seAgrego = true;
+				if (this.esUnaContraseniaFuerte(contrasenia)) {
+					this.contrasenias[i].setEsFuerte(true);
+				}
+			}
+			i++;
+		}
+		return seAgrego;
+	}
+
+	private boolean esUnaContraseniaFuerte(String contrasenia) {
+		// TODO: Debe devolver verdadero en caso de que la contrasenia suministrada
+		// cumpla con:
+		// Poseer 2 o mas mayusculas.
+		// Poseer 3 o mas numeros.
+		// Poseer 4 o mas minusculas.
+		// Cualquier otro caracter no debe ser considerado como mayuscula, minuscula o
+		// numero.
+		boolean esUnaContraseniaFuerte = false;
+		int mayusculas = 0;
+		int numeros = 0;
+		int minusculas = 0;
+
+		for (int i = 0; i < contrasenia.length(); i++) {
+			char caracter = contrasenia.charAt(i);
+			if (caracter >= 'A' && caracter <= 'Z') {
+				mayusculas++;
+			} else if (caracter >= 'a' && caracter <= 'z') {
+				minusculas++;
+			} else if (caracter >= '0' && caracter <= '9') {
+				numeros++;
+			}
+		}
+		esUnaContraseniaFuerte = mayusculas >= CANTIDAD_DE_MAYUSCULAS_PARA_CONTRASENIA_FUERTE
+				&& numeros >= CANTIDAD_DE_NUMEROS_PARA_CONTRASENIA_FUERTE
+				&& minusculas >= CANTIDAD_DE_MINUSCULAS_PARA_CONTRASENIA_FUERTE;
+
+		return esUnaContraseniaFuerte;
+	}
+
+	public boolean modificarContrasenia(String nombre, String nuevaContrasenia) {
+		// TODO: Debe modificar la contrasenia en el array de contrasenias, que cumpla
+		// con el nombre suministrado y
+		// volver a determinar si la nueva contrasenia es fuerte o no.
+		boolean contraseniaModificada = false;
+		for (int i = 0; i < this.contrasenias.length; i++) {
+			if (this.contrasenias[i] != null && this.contrasenias[i].getNombre().equals(nombre)) {
+				this.contrasenias[i].setContrasenia(nuevaContrasenia);
+				contraseniaModificada = true;
+			}
+		}
+
+		return contraseniaModificada;
+	}
+
+	public String obtenerContraseniasOrdenadasPorTipoDeContraseniaAscendente() {
+		// TODO: Debe ordenar las contrasenias en el array de contrasenias por el tipo
+		// de contrasenia de manera ascendente y devolver un String con las contrasenias
+		// ordenadas (ver el metodo obtenerContrasenias())
+
+		for (int i = 1; i < this.contrasenias.length; i++) {
+			for (int j = 0; j < this.contrasenias.length - 1; j++) {
+				if (this.contrasenias[j] != null && this.contrasenias[j + 1] != null && this.contrasenias[j]
+						.getTipoDeContrasenia().compareTo(this.contrasenias[j + 1].getTipoDeContrasenia()) > 0) {
+					Contrasenia contraseniaAuxiliar = this.contrasenias[j];
+					this.contrasenias[j] = this.contrasenias[j + 1];
+					this.contrasenias[j + 1] = contraseniaAuxiliar;
+				}
+			}
+		}
+
+		return this.obtenerContrasenias();
+	}
+
+	public Contrasenia[] obtenerContraseniasCuyoNombreEmpieceCon(String texto) {
+		// TODO: Debe generar un nuevo array que posea solo las contrasenias cuyo nombre
+		// comience con el texto suministrado.
+		int contadorDeContrasenias = 0;
+		for (int i = 0; i < this.contrasenias.length; i++) {
+			if (this.contrasenias[i] != null && this.contrasenias[i].getNombre().startsWith(texto)) {
+				contadorDeContrasenias++;
+			}
+		}
+		Contrasenia contraseniasCuyoNombreEmpiezanCon[] = new Contrasenia[contadorDeContrasenias];
+		int contador = 0;
+		for (int i = 0; i < this.contrasenias.length; i++) {
+			if (this.contrasenias[i] != null && this.contrasenias[i].getNombre().startsWith(texto)) {
+				contraseniasCuyoNombreEmpiezanCon[contador] = this.contrasenias[i];
+				contador++;
+			}
+		}
+		return contraseniasCuyoNombreEmpiezanCon;
+	}
+
+	public int obtenerLaCantidadDeContraseniasDebilesPorTipoDeContrasenia(TipoDeContrasenia tipoDeContrasenia) {
+		// TODO: Debe devolver la cantidad de contrasenias debiles existentes en el
+		// array, cuyo tipo de contrasenia coincida con el tipo de contrasenia
+		// suministrado.
+		int cantidadContraseniasDebilesPorTipoDeContrasenia = 0;
+		for (int i = 0; i < this.contrasenias.length; i++) {
+			if (this.contrasenias[i] != null && this.contrasenias[i].getTipoDeContrasenia().equals(tipoDeContrasenia)
+					&& this.contrasenias[i].isEsFuerte() == false) {
+				cantidadContraseniasDebilesPorTipoDeContrasenia++;
+	
+			}
+		}
+		return cantidadContraseniasDebilesPorTipoDeContrasenia;
+	}
+
+	public double obtenerPromedioDeLargoDeCaracteresDeContraseniasFuertes() {
+		// TODO: Debe devolver el promedio del largo de caracteres de contrasenias en el
+		// array que sean fuertes, considerando los decimales en el promedio (en el caso
+		// que el promedio posea decimales). Si no hay contrasenias fuertes, debe
+		// devolver cero.
+		double promedio = 0;
+		int cantidadDeContraseniasFuertes = 0;
+		int largoDeContrasenias = 0;
+		for (int i = 0; i < this.contrasenias.length; i++) {
+			if (this.contrasenias[i] != null && this.esUnaContraseniaFuerte(this.contrasenias[i].getContrasenia())) {
+				cantidadDeContraseniasFuertes++;
+				largoDeContrasenias += this.contrasenias[i].getContrasenia().length();
+			}
+		}
+		if (cantidadDeContraseniasFuertes > 0) {
+			promedio = ((double) largoDeContrasenias) / cantidadDeContraseniasFuertes;
+		}
+		return promedio;
+	}
+
+	private String obtenerContrasenias() {
+		String contrasenias = "";
+		for (int i = 0; i < this.contrasenias.length; i++) {
+			if (this.contrasenias[i] != null) {
+				contrasenias += "\n" + this.contrasenias[i].toString();
+			}
+		}
+		return contrasenias;
+	}
+
+	public void obtenercontras() {
+		String contrasenias = "";
+		for (int i = 0; i < this.contrasenias.length; i++) {
+			System.out.println("En la posicion " + i + " hay " + this.contrasenias[i]);
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "GestorDeContrasenias [contrasenias=" + Arrays.toString(contrasenias) + "]";
+	}
+}
