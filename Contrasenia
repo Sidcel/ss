@@ -1,0 +1,60 @@
+package ar.edu.unlam.pb1.dominio;
+
+import ar.edu.unlam.pb1.dominio.enums.TipoDeContrasenia;
+
+public class Contrasenia {
+	private String nombre;
+	private String contrasenia;
+	private TipoDeContrasenia tipoDeContrasenia;
+	private boolean esFuerte = false;
+
+	// TODO: Completar el constructor, atributos, getters y setters necesarios
+	// No esta permitido modificar el constructor
+	public Contrasenia(String nombre, String contrasenia, TipoDeContrasenia tipoDeContrasenia) {
+		this.nombre = nombre;
+		this.contrasenia = contrasenia;
+		this.tipoDeContrasenia = tipoDeContrasenia;
+	}
+
+
+	public boolean isEsFuerte() {
+		return esFuerte;
+	}
+
+
+	public void setEsFuerte(boolean esFuerte) {
+		this.esFuerte = esFuerte;
+	}
+
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getContrasenia() {
+		return contrasenia;
+	}
+
+	public void setContrasenia(String contrasenia) {
+		this.contrasenia = contrasenia;
+	}
+
+	public TipoDeContrasenia getTipoDeContrasenia() {
+		return tipoDeContrasenia;
+	}
+
+	public void setTipoDeContrasenia(TipoDeContrasenia tipoDeContrasenia) {
+		this.tipoDeContrasenia = tipoDeContrasenia;
+	}
+
+	@Override
+	public String toString() {
+		return "Contrasenia [nombre=" + nombre + ", contrasenia=" + contrasenia + ", tipoDeContrasenia="
+				+ tipoDeContrasenia + "]";
+	}
+	
+}
