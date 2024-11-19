@@ -151,7 +151,32 @@ public class GestorDeContrasenias {
 		}
 		return contraseniasCuyoNombreEmpiezanCon;
 	}
+public Contrasenia[] obtenerContraseniasCuyoNombreEmpieceCon(String texto) {
+    // TODO: Debe generar un nuevo array que posea solo las contrasenias cuyo nombre
+    // comience con el texto suministrado.
+    int contadorDeContrasenias = 0;
 
+    for (int i = 0; i < this.contrasenias.length; i++) {
+        if (this.contrasenias[i] != null 
+                && this.contrasenias[i].getNombre().length() >= texto.length()
+                && this.contrasenias[i].getNombre().substring(0, texto.length()).equals(texto)) {
+            contadorDeContrasenias++;
+        }
+    }
+
+    Contrasenia contraseniasCuyoNombreEmpieceCon[] = new Contrasenia[contadorDeContrasenias];
+    int contador = 0;
+
+    for (int i = 0; i < this.contrasenias.length; i++) {
+        if (this.contrasenias[i] != null 
+                && this.contrasenias[i].getNombre().length() >= texto.length()
+                && this.contrasenias[i].getNombre().substring(0, texto.length()).equals(texto)) {
+            contraseniasCuyoNombreEmpieceCon[contador++] = this.contrasenias[i];
+        }
+    }
+
+    return contraseniasCuyoNombreEmpieceCon;
+}
 	public int obtenerLaCantidadDeContraseniasDebilesPorTipoDeContrasenia(TipoDeContrasenia tipoDeContrasenia) {
 		// TODO: Debe devolver la cantidad de contrasenias debiles existentes en el
 		// array, cuyo tipo de contrasenia coincida con el tipo de contrasenia
